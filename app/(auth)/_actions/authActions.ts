@@ -1,5 +1,8 @@
 "use server";
 
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 type LoginState = {
   success: boolean;
   statusCode: number;
@@ -29,6 +32,23 @@ export const loginAction = async (
     body: JSON.stringify(payload),
   });
   const result = await res.json();
-  console.log(result);
+
+  if (result.success) {
+    const cookieStore = await cookies();
+
+    cookieStore.set("accessToken", result.data.accessToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24,
+      sameSite: "lax",
+    });
+    cookieStore.set("refreshToken", result.data.refreshToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7,
+      sameSite: "lax",
+    });
+    //redirect to requested route //? server side navigation
+    redirect("/dashboard", "push")
+  }
+
   return result;
 };

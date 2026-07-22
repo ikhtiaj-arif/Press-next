@@ -3,19 +3,21 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+// import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { loginAction } from "../_actions/authActions";
 
 const LoginForm = () => {
     const [state, action, pending] = useActionState(loginAction, false)
+    // const router = useRouter() //? Client side Navigation
 
     useEffect(() => {
         if (!state) return
 
         if (state.success) {
-
             toast.success(state.message || "Login Successful!")
+            // router.push("/dashboard")
         }
         if (!state.success) {
 
