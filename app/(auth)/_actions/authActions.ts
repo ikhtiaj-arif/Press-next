@@ -47,7 +47,8 @@ export const loginAction = async (
       sameSite: "lax",
     });
     //redirect to requested route //? server side navigation
-    redirect("/dashboard", "push")
+    // push keeps history, replace removes current url form the history
+    redirect("/dashboard", "push");
   }
 
   return result;
